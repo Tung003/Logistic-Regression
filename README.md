@@ -13,9 +13,11 @@ nó.
 
 2.  Cách hoạt động
 
-![](outputs/media/image1.png){width="8.79265091863517e-3in"
-height="4.37992125984252e-3in"}ví dụ: Hãy xem xét vấn đề phát hiện xem
-một người có bị bệnh tim hay không bị bệnh tim.
+ví dụ: Hãy xem xét vấn đề phát hiện xem một người có bị bệnh tim hay
+không bị bệnh tim.
+
+![idea](outputs/media/image1.png){width="5.583333333333333in"
+height="2.78125in"}
 
 Đầu vào có thể biểu diễn như vector
 ${x = \lbrack x}_{0},x_{1},x_{2},..,x_{n}$\], với mỗi thành phần $x_{i}$
