@@ -6,18 +6,16 @@ Hồi quy logistic là một thuật toán học máy có giám sát được s�
 các vấn đề phân loại. Không giống như hồi quy tuyến tính dự đoán các giá
 trị liên tục, nó dự đoán xác suất đầu vào thuộc về một lớp cụ thể. Nó
 được sử dụng để phân loại nhị phân, trong đó đầu ra có thể là một trong
-hai loại có thể có như Có/Không, Đúng/Sai hoặc 0/1. Nó sử dụng hàm
+hai loại có thể có như Có/ Không, Đúng/ Sai hoặc 0/ 1. Nó sử dụng hàm
 sigmoid để chuyển đổi đầu vào thành giá trị xác suất giữa 0 và 1. Hãy
 xem những điều cơ bản về hồi quy logistic và các khái niệm cốt lõi của
 nó.
 
 2.  Cách hoạt động
 
-ví dụ: Hãy xem xét vấn đề phát hiện xem một người có bị bệnh tim hay
-không bị bệnh tim.
-
-![idea](outputs/media/image1.png){width="5.583333333333333in"
-height="2.78125in"}
+![](outputs/media/image1.png){width="8.79265091863517e-3in"
+height="4.37992125984252e-3in"}ví dụ: Hãy xem xét vấn đề phát hiện xem
+một người có bị bệnh tim hay không bị bệnh tim.
 
 Đầu vào có thể biểu diễn như vector
 ${x = \lbrack x}_{0},x_{1},x_{2},..,x_{n}$\], với mỗi thành phần $x_{i}$
@@ -25,6 +23,9 @@ tương ứng với một đặc trưng trong một mẫu bệnh án.
 
 \- Để có mô hình đáp ứng được điều này ta thử quay lại bài toán hồi quy
 tuyến tính $f(x_{n}) = \omega_{n}^{T}.x_{n} + b_{n}$.
+
+![ex](outputs/media/image2.png){width="5.763888888888889in"
+height="2.454861111111111in"}
 
 $$f(x_{n}) = 29.79,\  \in R\ $$
 
@@ -37,36 +38,21 @@ ra giá trị rời rạc, xem đồ thị của hàm Sigmoid.
 $\widehat{y\ } = g(f(x_{n})) = \frac{1}{1 + e^{- (f(x_{n}))}},\widehat{y\ },g(f(x_{n})) \in \lbrack 0,1\rbrack$
 
 ![Screenshot from 2025-06-11
-23-13-10](outputs/media/image2.png){width="5.759722222222222in"
+23-13-10](outputs/media/image3.png){width="5.759722222222222in"
 height="3.254861111111111in"}
 
 \- Xét một ví dụ xác suất thống kê cho việc tung đồng xu. Tung đồng xu 5
 lần được 3 lần mặt ngửa (đặt là 1) và 2 lần mặt sấp (đặt là 0).
 
-Xác suất mặt ngửa: P(y=1\|x)=$\widehat{y\ }$.
-
-Xác suất mặt sấp : P(y=0\|x)=$1 - \ \widehat{y\ }$.
-
-Vậy xác suất: $P(y|x) = \left\{ \begin{aligned}
-\widehat{y\ }\ \ \ \ \ \ \ \ \ \ ,nếu\ y = 1 \\
-1 - \ \widehat{y\ }\ \ \ \ ,\ nếu\  & y = 0\ 
-\end{aligned} \right.\ $
-
-trong đó $\widehat{y\ } = \frac{1}{1 + e^{- (f(x_{n}))}}$ là xác xuất dự
-đoán y=1.
-
-viết gọn lại:
-P(y\|x)=${\widehat{y\ }}^{y\ }.{(1 - \widehat{y\ })}^{1 - y\ }$, y=0
-hoặc y=1.
+![Screenshot from 2025-06-16
+17-07-23](outputs/media/image4.png){width="5.7625in"
+height="2.890277777777778in"}
 
 Để dễ tính ta lấy log hai vế.
 
-log(P(y\|x))=$log({\widehat{y\ }}^{y\ }.{(1 - \widehat{y\ })}^{1 - y\ }$)
-
-$< = > log(P(y|x))$=$log({\widehat{y\ }}^{y\ }$)+log(${(1 - \widehat{y\ })}^{1 - y\ }$)
-
-$< = > log(P(y|x))$=$y.log({\widehat{y\ }}^{\ }$)+$(1 - y$).log($1 - \widehat{y\ }$)
-(\*)
+![Screenshot from 2025-06-16
+17-06-22](outputs/media/image5.png){width="5.767361111111111in"
+height="1.4506944444444445in"}
 
 Mục tiêu của bài toán là tối đa hoá dự đoán càng gần nhãn thực tế thì
 càng tốt: nhãn thực tế y=1, dự đoán $\widehat{y\ }$=0.999 kết luận tốt
@@ -114,25 +100,9 @@ nếu y=0, (\*)\<=\> $log({1 - \widehat{y\ }}^{\ }$)
 | 0          | 0.001      | -0.0004345    | tốt ($log(P(y|x))$ gần 0) |
 +------------+------------+---------------+---------------------------+
 
-kết luận: khi mô hình dự đoán ${\widehat{y\ }}^{\ }$gần 1 thì
-1-${\widehat{y\ }}^{\ }$gần 0 và (\*)
-
-$log(P(y|x))$ âm rất lớn =\> mô hình tệ, ngược lại
-${\widehat{y\ }}^{\ }$gần 0 thì 1-${\widehat{y\ }}^{\ }$gần 1 và
-$log(P(y|x))$ gần 0 =\> mô hình tốt.
-
-từ đây ta có thể suy ra được hàm mất mát dựa vào (\*)
-
-Loss=-$\ log(P(y|x))$=-
-\[$y.log({\widehat{y\ }}^{\ }$)+$(1 - y$).log($1 - \widehat{y\ }$)\]
-
-ta cần lấy dấu âm vế phải của biểu thức (\*):
-
-\+ mô hình dự đoán tốt: $log(P(y|x))$gần 0=\>Loss nhỏ(gần 0)
-
-\+ mô hình dự đoán tệ: $log(P(y|x))$âm lớn=\>Loss rất lớn
-
-(vd: Loss=-$\ log(P(y|x))$=-(-3)=3)
+![Screenshot from 2025-06-16
+17-05-12](outputs/media/image6.png){width="5.821527777777778in"
+height="3.671527777777778in"}
 
 Vậy tiếp theo ta cần phải làm gì khi đã có được hàm Loss.
 
@@ -142,48 +112,24 @@ Vậy tiếp theo ta cần phải làm gì khi đã có được hàm Loss.
 
 Trong tập huấn luyện có n mẫu.
 
-L(w,b)
-=-$\frac{1\ }{n\ }.\sum_{i = 1\ }^{n\ }{{\lbrack y\ }_{i\ }.log({\widehat{y\ }\ }_{i\ }) + (1 - {y\ }_{i\ }).log(1 - {\widehat{y\ }\ }_{i\ })}$\]
-
-trong đó ${\widehat{y\ }\ }_{i\ } = \frac{1}{1 + e^{- (f(x_{i\ }))}}$ và
-$f(x_{i\ }) = \omega^{T\ }.x_{i\ } + b\ $
+![Screenshot from 2025-06-16
+17-03-55](outputs/media/image7.png){width="5.764583333333333in"
+height="0.8833333333333333in"}
 
 \- đạo hàm riêng Loss với w.
 
-$$\frac{\partial Loss}{\partial\omega} = - \frac{1\ }{n\ }.\sum_{i = 1\ }^{n\ }{\frac{\partial Loss}{\partial{\widehat{y\ }\ }_{i\ }}.\frac{\partial{\widehat{y\ }\ }_{i\ }}{\partial f(x_{i\ })}.\frac{\partial f(x_{i\ })}{\partial\omega}}$$
-
--   $\frac{\partial Loss}{\partial{\widehat{y\ }\ }_{i\ }}$=$\frac{{y\ }_{i\ }\ }{{\widehat{y\ }\ }_{i\ }}$+$\frac{{(1 - y\ }_{i\ }).( - 1)}{{(1 - \widehat{y\ }\ }_{i\ })}$=$\frac{{y\ }_{i\ }\ }{{\widehat{y\ }\ }_{i\ }} - \frac{{(1 - y\ }_{i\ })}{{(1 - \widehat{y\ }\ }_{i\ })}$
-
-```{=html}
-<!-- -->
-```
--   $\frac{\partial{\widehat{y\ }\ }_{i\ }}{\partial f(x_{i\ })}$=${\widehat{y\ }}_{i\ }\frac{d\ }{{d\ }_{\ f(x_{i\ })}\ }$=($\frac{1}{1 + e^{- (f(x_{i\ }))}}$)$\frac{d\ }{{d\ }_{\ f(x_{i\ })}\ }$=$\frac{e^{- (f(x_{i\ }))}}{{(1 + e^{- (f(x_{i\ }))})}^{2\ \ }}$
-
-> $${{= \widehat{y\ }}_{i\ }}^{2\ \ }.e^{- (f(x_{i\ }))}$$
-
-${mà\ \widehat{y\ }\ }_{i\ } = \frac{1}{1 + e^{- (f(x_{i\ }))}}$
-=\>$e^{- (f(x_{i\ }))}$=$\frac{1}{{\widehat{y\ }\ }_{i\ }} - 1\ $
-
-suy ra
-$\frac{\partial{\widehat{y\ }\ }_{i\ }}{\partial f(x_{i\ })}{{= \widehat{y\ }}_{i\ }}^{2\ \ }$($\frac{1}{{\widehat{y\ }\ }_{i\ }} - 1\ $)=${\widehat{y\ }\ }_{i\ }$(1-${\widehat{y\ }\ }_{i\ }$)
-
--   $\frac{\partial f(x_{i\ })}{\partial\omega}$=$f(x_{i\ })\frac{d\ }{{d\ }_{\omega}\ }$=${(\omega}^{T\ }.x_{i\ } + b\ )\frac{d\ }{{d\ }_{\omega}\ }$=$x_{i\ }$
-
-suy ra
-$\frac{\partial Loss}{\partial\omega} = - \frac{1\ }{n\ }.\sum_{i = 1\ }^{n\ }{\frac{\partial Loss}{\partial{\widehat{y\ }\ }_{i\ }}.\frac{\partial{\widehat{y\ }\ }_{i\ }}{\partial f(x_{i\ })}.\frac{\partial f(x_{i\ })}{\partial\omega}}$
-
-=$- \frac{1\ }{n\ }.\sum_{i = 1\ }^{n\ }{((\frac{{y\ }_{i\ }\ }{{\widehat{y\ }\ }_{i\ }} - \frac{{(1 - y\ }_{i\ })}{{(1 - \widehat{y\ }\ }_{i\ })}).({\widehat{y\ }\ }_{i\ }(1 - {\widehat{y\ }\ }_{i\ }).x_{i\ }))}$
-
-=$\frac{1\ }{n\ }.\sum_{i = 1\ }^{n\ }{({{\widehat{y\ }\ }_{i\ } - y\ }_{i\ }).x_{i\ }}$
+![Screenshot from 2025-06-16
+17-02-09](outputs/media/image8.png){width="5.761805555555555in"
+height="5.8493055555555555in"}
 
 \- đạo hàm riêng Loss với w.
 
--   $\frac{\partial f(x_{i\ })}{\partial b\ }$=$f(x_{i\ })\frac{d\ }{{d\ }_{b\ }\ }$=${(\omega}^{T\ }.x_{i\ } + b\ )\frac{d\ }{{d\ }_{\omega}\ }$=1
+![Screenshot from 2025-06-16
+17-02-58](outputs/media/image9.png){width="5.763194444444444in"
+height="0.9173611111111111in"}
 
-$\frac{\partial Loss}{\partial b\ } = \frac{1\ }{n\ }.\sum_{i = 1\ }^{n\ }{({{\widehat{y\ }\ }_{i\ } - y\ }_{i\ })}$
-
-5.  ![](outputs/media/image3.png){width="4.409448818897638e-3in"
-    height="2.8346456692913387e-3in"}![](outputs/media/image4.png){width="4.409448818897638e-3in"
+5.  ![](outputs/media/image10.png){width="4.409448818897638e-3in"
+    height="2.8346456692913387e-3in"}![](outputs/media/image11.png){width="4.409448818897638e-3in"
     height="2.8346456692913387e-3in"}Kiểm thử
 
     chạy thử thuật toán
@@ -242,7 +188,7 @@ $\frac{\partial Loss}{\partial b\ } = \frac{1\ }{n\ }.\sum_{i = 1\ }^{n\ }{({{\w
 
 **Tìm điểm tối ưu.**
 
-![Find_threshold_best](outputs/media/image5.png){width="4.773611111111111in"
+![Find_threshold_best](outputs/media/image12.png){width="4.773611111111111in"
 height="2.6069444444444443in"}
 
 Điểm tối ưu cho F1 và Recall
@@ -262,14 +208,14 @@ Threshold best Recall: 0.32 with Recall = 0.795
 Điều chỉnh tham số mô hình cụ thể là 2 ngưỡng mới tìm được ở trên để xem
 xét mô hình
 
-![](outputs/media/image6.png){width="4.409448818897638e-3in"
-height="2.6771653543307085e-3in"}![](outputs/media/image7.png){width="4.409448818897638e-3in"
+![](outputs/media/image13.png){width="4.409448818897638e-3in"
+height="2.6771653543307085e-3in"}![](outputs/media/image14.png){width="4.409448818897638e-3in"
 height="2.6771653543307085e-3in"}
 
 Best F1 Best Recall
 
-![](outputs/media/image8.png){width="4.566929133858267e-3in"
-height="3.425196850393701e-3in"}![](outputs/media/image9.png){width="4.566929133858267e-3in"
+![](outputs/media/image15.png){width="4.566929133858267e-3in"
+height="3.425196850393701e-3in"}![](outputs/media/image16.png){width="4.566929133858267e-3in"
 height="3.425196850393701e-3in"}
 
 Best F1 confusion matrix Best Recall confusion matrix
