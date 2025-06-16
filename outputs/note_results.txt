@@ -1,0 +1,105 @@
+###############Evaluation parameters###############
+với tham số huấn luyện của model learing_rate=0.01,num_iterations=5000,threshold=0.5
+ta có kết quả
+Model accuracy:  0.837
+F1_score  =  0.119
+Recall    =  0.066
+Precision =  0.615
+-----------------Classification report-----------------
+               precision    recall  f1-score   support
+
+           0       0.84      0.99      0.91       610
+           1       0.62      0.07      0.12       122
+
+    accuracy                           0.84       732
+   macro avg       0.73      0.53      0.51       732
+weighted avg       0.80      0.84      0.78       732
+
+confusion_matrix 
+ [[605   5]
+ [114   8]]
+*nhận xét* 
+-thấy rằng Model accuracy:  0.837 dễ nhầm lẫn thành model dự đoán tốt tuy nhiên Recall=  0.066 lại rất thấp
+->dẫn đến việc dự đoán người thực sự mắc bệnh thì model dự đoán lại rất tệ nhìn vào confusion_matrix có đến
+122 người thực sự mắc bệnh mà chỉ dự đoán được 8 người
+
+/nguyên nhân/
+do bộ dữ liệu bị mát cân bằng giữa class bị bệnh (y=1) và class không bị bệnh (y=0), nên mô hình tập trung 
+vào học các đặc trưng của các samples không bị bệnh (y=0).
+
+/giải pháp/
+có 2 giải pháp điển hình.
+-giải pháp 1: Cân bằng dữ liệu huấn luyện nhân bản dữ liệu những class bị bệnh để model có thể học được 
+nhiều hơn về class bị bệnh(y=1).
++kết quả:
+Before SMOTE:
+Number of samples in each class: Counter({0: 2489, 1: 435})
+
+After SMOTE:
+Number of samples in each class: Counter({0: 2489, 1: 2489})
+
+-giải pháp 2: Ta sẽ cần tìm điểm cân bằng sao cho model có thể dự đoán được nhiều người bị bệnh thật sự 
+nhưng cũng không được cảnh báo nhầm nhiều người từ không bị bệnh thành bị bệnh. bằng cách tìm điểm ngưỡng 
+để cân bằng F1_score. tuy nhiên nếu muốn model không bỏ sót người bị bệnh thực sự thì ta lại phải đánh đổi
+ việc model cảnh báo nhầm những người không bị bệnh nhưng lại được dự đoán là bị bệnh.
+
++kết quả: khi áp dụng cả gp1 và 2 ta tìm được điểm ngưỡng tốt nhất như sau.
+Threshold best F1-score: 0.46   with F1 = 0.378
+Threshold best Recall: 0.32 with Recall = 0.795
+
+/áp dụng 2 ngưỡng này với model để đánh giá tổng thể /
++ ngưỡng 0.46
+
+Model accuracy:  0.654
+F1_score  =  0.378
+Recall    =  0.631
+Precision =  0.270
+-----------------Classification report-----------------
+               precision    recall  f1-score   support
+
+           0       0.90      0.66      0.76       610
+           1       0.27      0.63      0.38       122
+
+    accuracy                           0.65       732
+   macro avg       0.58      0.65      0.57       732
+weighted avg       0.79      0.65      0.70       732
+
+confusion_matrix 
+ [[402 208]
+ [ 45  77]]
+
+* nhận xét*
+ưu điểm:
+tỷ lệ phát hiện người bệnh (recall) ở mức trên trung bình (0.63), tức mô hình khá nhạy với người bệnh.
+FN = 45 -> bỏ sót người bệnh không quá nhiều.
+nhược điểm:
+precision rất thấp (27%) -> rất nhiều người không bệnh bị dự đoán nhầm là bệnh (FP = 208).
+điều này làm giảm độ tin cậy của mô hình khi báo một người là có bệnh -> dễ gây hoang mang nếu dùng trong thực tế.
+
++ ngưỡng 0.32
+
+Model accuracy:  0.519
+F1_score  =  0.355
+Recall    =  0.795
+Precision =  0.229
+-----------------Classification report-----------------
+               precision    recall  f1-score   support
+
+           0       0.92      0.46      0.62       610
+           1       0.23      0.80      0.36       122
+
+    accuracy                           0.52       732
+   macro avg       0.57      0.63      0.49       732
+weighted avg       0.80      0.52      0.57       732
+
+confusion_matrix 
+ [[283 327]
+ [ 25  97]]
+
+* nhận xét*
+ưu điểm:
+recall rất cao (80%) -> Mô hình rất giỏi phát hiện người bệnh, chỉ bỏ sót 25 người.
+TP cao -> đúng nhiều người bệnh.
+nhược điểm:
+precision rất thấp (~23%) -> Dự đoán người bệnh nhưng sai quá nhiều (327 người không bệnh bị báo là bệnh).
+điều này gây cảnh báo giả nhiều -> không phù hợp nếu dùng cho chẩn đoán chính thức, trừ khi làm sàng lọc bước đầu.

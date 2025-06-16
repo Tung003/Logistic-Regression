@@ -1,0 +1,10 @@
+# Report data
+ydata_profiling==v4.16.1
+
+# process data
+pandas==2.2.3
+numpy==2.1.2
+matplotlib==3.10.0
+
+# machine learning
+scikit-learn==1.6.1
