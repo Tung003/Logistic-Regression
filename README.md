@@ -197,11 +197,11 @@ xét mô hình
 <table align="center">
   <tr>
     <td align="center" width="45%">
-      <img src="outputs/media/image13.png" width="100%"><br>
+      <img src="outputs/media/image14.png" width="100%"><br>
       <em>Best F1</em>
     </td>
     <td align="center" width="45%">
-      <img src="outputs/media/image14.png" width="100%"><br>
+      <img src="outputs/media/image13.png" width="100%"><br>
       <em>Best Recall</em>
     </td>
   </tr>
